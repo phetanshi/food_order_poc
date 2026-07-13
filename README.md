@@ -16,5 +16,5 @@ This project contains a minimal FastAPI application skeleton for a food ordering
 
 ```bash
 pip install -r requirements.txt
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload --env-file .env.dev
 ```
