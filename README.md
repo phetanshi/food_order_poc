@@ -15,6 +15,13 @@ This project contains a minimal FastAPI application skeleton for a food ordering
 ## Run locally
 
 ```bash
+python -m venv .venv
+
+.venv\Scripts\activate
+
+python.exe -m pip install --upgrade pip
+
 pip install -r requirements.txt
+
 uvicorn app.main:app --reload --env-file .env.dev
 ```
