@@ -1,0 +1,50 @@
+pipeline:
+  name: Repository Build
+  identifier: repository_build
+  projectIdentifier: <+input>
+  orgIdentifier: default
+  properties:
+    ci:
+      codebase:
+        connectorRef: account.repository_source
+        repoName: phetanshi/food_order_poc
+        build:
+          type: branch
+          spec:
+            branch: main
+  stages:
+  - stage:
+      name: python (1)
+      identifier: project_1
+      type: CI
+      spec:
+        cloneCodebase: true
+        execution:
+          steps:
+          - step:
+              type: Run
+              name: Restore
+              identifier: restore_1
+              spec:
+                connectorRef: account.dockerhub
+                image: python:3.12
+                shell: Sh
+                command: python -m pip install -r requirements.txt
+          - step:
+              type: Run
+              name: Test
+              identifier: test_2
+              spec:
+                connectorRef: account.dockerhub
+                image: python:3.12
+                shell: Sh
+                command: pytest
+        infrastructure:
+          type: KubernetesDirect
+          spec:
+            connectorRef: account.repo_pipeline_k8s
+            namespace: harness-ci
+            delegateSelectors:
+            - pipeline-generator-linux
+            automountServiceAccountToken: true
+            os: Linux
